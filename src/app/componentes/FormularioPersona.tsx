@@ -10,31 +10,31 @@ interface Props {
 }
 
 const FormularioPersona = ({ agregarPersona, guardarCambios, personaSeleccionada, actualizarNombreActual }: Props) => {
-    const[persona, setPersona] = useState<Persona>({
-        nombre: '',
-        edad: 0,
-        cargo: '',
-        descripcion: '',
-        tarea: '',
-        fechaIngreso: ''
+  const[persona, setPersona] = useState<Persona>({
+    nombre: '',
+    edad: 0,
+    cargo: '',
+    descripcion: '',
+    tarea: '',
+    fechaIngreso: ''
+  });
+
+  const [errores, setErrores] = useState({
+    nombre: '',
+    edad: '',
+    cargo: '',
+    descripcion: '',
+    tarea: '',
+    fechaIngreso: ''
     });
-
-    const [errores, setErrores] = useState({
-        nombre: '',
-        edad: '',
-        cargo: '',
-        descripcion: '',
-        tarea: '',
-        fechaIngreso: ''
-        });
     
-    useEffect(() =>{
-        if (personaSeleccionada) {
-            setPersona(personaSeleccionada);
-        }
-    }, [personaSeleccionada]);
+  useEffect(() =>{
+    if (personaSeleccionada) {
+      setPersona(personaSeleccionada);
+    }
+  }, [personaSeleccionada]);
 
-    const handleChange = (
+  const handleChange = (
   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
 ) => {
   const { name, value } = e.target;
@@ -45,7 +45,7 @@ const FormularioPersona = ({ agregarPersona, guardarCambios, personaSeleccionada
     actualizarNombreActual(value);
   }
 
-   setErrores({ ...errores, [name]: '' });
+  setErrores({ ...errores, [name]: '' });
 };
 
   const validarFormulario = () => {
@@ -226,3 +226,5 @@ const FormularioPersona = ({ agregarPersona, guardarCambios, personaSeleccionada
     </form>
   );
 };
+
+export default FormularioPersona;
