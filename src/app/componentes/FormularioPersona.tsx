@@ -122,39 +122,6 @@ const FormularioPersona = ({ agregarPersona, guardarCambios, personaSeleccionada
 
   };
   
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-
-    if (!validarFormulario()) return;
-
-    if (personaSeleccionada) {
-      guardarCambios(persona);
-    } else {
-      agregarPersona(persona);
-    }
-
-    setPersona({
-      nombre: '',
-      edad: 0,
-      cargo: '',
-      descripcion: '',
-      tarea: '',
-      fechaIngreso: '',
-    });
-
-    setErrores({
-      nombre: '',
-      edad: '',
-      cargo: '',
-      descripcion: '',
-      tarea: '',
-      fechaIngreso: '',
-    }); 
-    actualizarNombreActual('');
-
-  };
-
   return (
     <form onSubmit={handleSubmit}>
       <h2>{personaSeleccionada ? 'Editar Persona' : 'Agregar Persona'}</h2>
