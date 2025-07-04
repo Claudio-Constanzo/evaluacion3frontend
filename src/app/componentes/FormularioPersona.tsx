@@ -1,5 +1,5 @@
 'use client';
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Persona } from "../interfaces/Persona";
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
   actualizarNombreActual(nombre: string): void;
 }
 
-const FormularioPersona = () => {
+const FormularioPersona = ({ agregarPersona, guardarCambios, personaSeleccionada, actualizarNombreActual }: Props) => {
     const[persona, setPersona] = useState<Persona>({
         nombre: '',
         edad: 0,
@@ -154,4 +154,75 @@ const FormularioPersona = () => {
     actualizarNombreActual('');
 
   };
-}
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <h2>{personaSeleccionada ? 'Editar Persona' : 'Agregar Persona'}</h2>
+
+      <input
+        type="text"
+        name="nombre"
+        placeholder="Nombre"
+        value={persona.nombre}
+        onChange={handleChange}
+      />
+      <br/>
+      {errores.nombre && <p style={{ color: 'red' }}>{errores.nombre}</p>}
+
+      <input
+        type="number"
+        name="edad"
+        placeholder="Edad"
+        value={persona.edad}
+        onChange={handleChange}
+      />
+      <br/>
+      {errores.edad && <p style={{ color: 'red' }}>{errores.edad}</p>}
+
+      <select name="cargo" value={persona.cargo} onChange={handleChange}>
+        <option value="">Selecciona un cargo</option>
+        <option value="Administrador">Administrador</option>
+        <option value="Supervisor">Supervisor</option>
+        <option value="Programador">Programador</option>
+        <option value="Otro">Otro</option>
+      </select>
+      <br/>
+      {errores.cargo && <p style={{ color: 'red' }}>{errores.cargo}</p>}
+
+
+      <textarea
+        name="descripcion"
+        placeholder="Descripción"
+        value={persona.descripcion}
+        onChange={handleChange}
+      />
+      <br/>
+      {errores.descripcion && <p style={{ color: 'red' }}>{errores.descripcion}</p>}
+
+      <input
+        type="text"
+        name="tarea"
+        placeholder="Tarea asignada"
+        value={persona.tarea}
+        onChange={handleChange}
+      />
+      <br/>
+      {errores.tarea && <p style={{ color: 'red' }}>{errores.tarea}</p>}
+
+      <input
+        type="date"
+        name="fechaIngreso"
+        value={persona.fechaIngreso}
+        onChange={handleChange}
+      />
+      <br/>
+      {errores.fechaIngreso && <p style={{ color: 'red' }}>{errores.fechaIngreso}</p>}
+
+
+      <button type="submit">
+        {personaSeleccionada ? 'Actualizar' : 'Agregar'}
+      </button>
+      <br/>
+    </form>
+  );
+};
