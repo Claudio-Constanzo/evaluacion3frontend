@@ -88,4 +88,70 @@ const FormularioPersona = () => {
     // Retorna true si no hay errores
     return Object.values(nuevosErrores).every((error) => error === '');
   };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+
+    if (!validarFormulario()) return;
+
+    if (personaSeleccionada) {
+      guardarCambios(persona);
+    } else {
+      agregarPersona(persona);
+    }
+
+    setPersona({
+      nombre: '',
+      edad: 0,
+      cargo: '',
+      descripcion: '',
+      tarea: '',
+      fechaIngreso: '',
+    });
+
+    setErrores({
+      nombre: '',
+      edad: '',
+      cargo: '',
+      descripcion: '',
+      tarea: '',
+      fechaIngreso: '',
+    }); 
+    actualizarNombreActual('');
+
+  };
+  
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+
+    if (!validarFormulario()) return;
+
+    if (personaSeleccionada) {
+      guardarCambios(persona);
+    } else {
+      agregarPersona(persona);
+    }
+
+    setPersona({
+      nombre: '',
+      edad: 0,
+      cargo: '',
+      descripcion: '',
+      tarea: '',
+      fechaIngreso: '',
+    });
+
+    setErrores({
+      nombre: '',
+      edad: '',
+      cargo: '',
+      descripcion: '',
+      tarea: '',
+      fechaIngreso: '',
+    }); 
+    actualizarNombreActual('');
+
+  };
 }
