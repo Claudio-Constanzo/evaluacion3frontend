@@ -30,3 +30,9 @@ export default function Page() {
       setPersonas(nuevasPersonas);
     }
   };
+
+  const editarPersona = (indice: number) => {
+    setPersonaSeleccionada(personas[indice]);
+    setIndiceEditar(indice);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
