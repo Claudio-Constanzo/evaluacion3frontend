@@ -19,3 +19,7 @@ export default function Page() {
   useEffect(() => {
     localStorage.setItem('personas', JSON.stringify(personas));
   }, [personas]);
+
+  const agregarPersona = (persona: Persona) => {
+    setPersonas([...personas, persona]);
+  };
