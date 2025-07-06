@@ -23,3 +23,10 @@ export default function Page() {
   const agregarPersona = (persona: Persona) => {
     setPersonas([...personas, persona]);
   };
+
+  const eliminarPersona = (indice: number) => {
+    if (window.confirm('¿Estás seguro de eliminar esta persona?')) {
+      const nuevasPersonas = personas.filter((_, i) => i !== indice);
+      setPersonas(nuevasPersonas);
+    }
+  };
