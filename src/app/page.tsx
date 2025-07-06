@@ -36,3 +36,13 @@ export default function Page() {
     setIndiceEditar(indice);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const actualizarPersona = (personaActualizada: Persona) => {
+    if (indiceEditar !== null) {
+      const nuevasPersonas = [...personas];
+      nuevasPersonas[indiceEditar] = personaActualizada;
+      setPersonas(nuevasPersonas);
+      setPersonaSeleccionada(null);
+      setIndiceEditar(null);
+    }
+  };
