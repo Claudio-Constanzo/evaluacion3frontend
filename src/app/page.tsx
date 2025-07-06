@@ -46,3 +46,50 @@ export default function Page() {
       setIndiceEditar(null);
     }
   };
+
+  return (
+    <div className="App">
+      <h1>Gestión de Personas y Tareas</h1>
+      <h2>Bienvenido {nombreActual}</h2>
+      <FormularioPersona
+        agregarPersona={agregarPersona}
+        personaSeleccionada={personaSeleccionada}
+        guardarCambios={actualizarPersona}
+        actualizarNombreActual={setNombreActual}
+      />
+
+      <h3>Lista de personas registradas</h3>
+      <table border={1} style={{ marginTop: '1rem', width: '100%' }}>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Edad</th>
+            <th>Cargo</th>
+            <th>Descripción</th>
+            <th>Tarea</th>
+            <th>Fecha de Ingreso</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          {personas.map((p, index) => (
+            <tr key={index}>
+              <td>{index}</td>
+              <td>{p.nombre}</td>
+              <td>{p.edad}</td>
+              <td>{p.cargo}</td>
+              <td>{p.descripcion}</td>
+              <td>{p.tarea}</td>
+              <td>{p.fechaIngreso}</td>
+              <td>
+                <button onClick={() => editarPersona(index)}>Editar</button>{' '}
+                <button onClick={() => eliminarPersona(index)}>Eliminar</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
