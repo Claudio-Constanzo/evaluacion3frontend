@@ -26,3 +26,22 @@ export const agregarPersona = async (persona: Persona): Promise<{ data?: Persona
     }
 };
 
+export const actualizarPersona = async (persona: Persona): Promise <{ success: boolean; error?: string }> => {
+    if (!persona.id) return { success: false, error: 'Falta id de la persona' };
+    try {
+        const ref = doc(db, 'personas', persona.id);
+        await updateDoc(ref, persona);
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: 'Error al actualizar la persona: ' + error.message };
+    }
+};
+
+export const eliminarPersona = async (id: string): Promise<{ success: boolean; error?: string }> => {
+    try {
+        await deleteDoc(doc(db, 'personas', id));
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: 'Error al eliminar la persona: ' + error.message };
+    }
+};
