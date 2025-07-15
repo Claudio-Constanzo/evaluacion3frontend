@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from "react";
-import { Persona } from "../interfaces/Persona";
+import { Persona } from "../../interfaces/Persona";
 
 interface Props {
   agregarPersona(persona: Persona): any;

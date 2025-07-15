@@ -1,5 +1,5 @@
 import { db } from './Firebase';
-import { Persona } from '../interfaces/Persona';
+import { Persona } from './interfaces/Persona';
 import { collection, getDocs, addDoc, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 
 const colleccion = collection(db, 'personas');
@@ -11,6 +11,8 @@ export const obtenerPersonas = async (): Promise<{ data: Persona[]; error: strin
             id: doc.id,
             ...doc.data(),
         })) as Persona[];
+
+        return {data: personas, error: null};
     } catch (error: any) {
         return {data: [], error: 'Error al obtener las personas: ' + error.message};
     }
@@ -29,8 +31,9 @@ export const agregarPersona = async (persona: Persona): Promise<{ data?: Persona
 export const actualizarPersona = async (persona: Persona): Promise <{ success: boolean; error?: string }> => {
     if (!persona.id) return { success: false, error: 'Falta id de la persona' };
     try {
-        const ref = doc(db, 'personas', persona.id);
-        await updateDoc(ref, persona);
+        const { id,...datosPersona } = persona;
+        const ref = doc(db, 'personas', id);
+        await updateDoc(ref, datosPersona);
         return { success: true };
     } catch (error: any) {
         return { success: false, error: 'Error al actualizar la persona: ' + error.message };
