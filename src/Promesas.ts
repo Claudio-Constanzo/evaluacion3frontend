@@ -1,9 +1,25 @@
 import { db } from './Firebase';
 import { Persona } from './interfaces/Persona';
-import { collection, getDocs, addDoc, doc, deleteDoc, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, deleteDoc, updateDoc, onSnapshot } from 'firebase/firestore';
 
 const colleccion = collection(db, 'personas');
+const usePersonasTiempoReal = () => {
+    const [personas, setPersonas] = useState<Persona[]>([]);
 
+    useEffect(() => {
+        const unsub = onSnapshot(colleccion(db, 'personas'), (snapshot) => {
+            const datos = snapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            })) as Persona[];
+            setPersonas(datos);
+        });
+
+        return () => unsub();
+    }, []);
+
+    return personas;
+}
 export const obtenerPersonas = async (): Promise<{ data: Persona[]; error: string | null}> =>{
     try {
         const snapshot = await getDocs(colleccion);
@@ -21,8 +37,9 @@ export const obtenerPersonas = async (): Promise<{ data: Persona[]; error: strin
 
 export const agregarPersona = async (persona: Persona): Promise<{ data?: Persona; error?: string}> => {
     try {
+        const {id, ...datosSinId} = persona;
         const docRef =await addDoc(colleccion, persona);
-        return {data: {...persona, id: docRef.id} };
+        return {data: {...datosSinId, id: docRef.id} };
     } catch (error: any) {
         return {error: 'Error al agregar la persona: ' + error.message};
     }
