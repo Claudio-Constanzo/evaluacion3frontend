@@ -1,4 +1,5 @@
 import { db } from './Firebase';
+import { useState, useEffect } from 'react';
 import { Persona } from './interfaces/Persona';
 import { collection, getDocs, addDoc, doc, deleteDoc, updateDoc, onSnapshot } from 'firebase/firestore';
 
@@ -7,7 +8,7 @@ const usePersonasTiempoReal = () => {
     const [personas, setPersonas] = useState<Persona[]>([]);
 
     useEffect(() => {
-        const unsub = onSnapshot(colleccion(db, 'personas'), (snapshot) => {
+        const unsub = onSnapshot(collection(db, 'personas'), (snapshot) => {
             const datos = snapshot.docs.map((doc) => ({
                 id: doc.id,
                 ...doc.data(),
