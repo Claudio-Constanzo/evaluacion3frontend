@@ -4,7 +4,7 @@ import { Persona } from './interfaces/Persona';
 import { collection, getDocs, addDoc, doc, deleteDoc, updateDoc, onSnapshot } from 'firebase/firestore';
 
 const colleccion = collection(db, 'personas');
-const usePersonasTiempoReal = () => {
+export const usePersonasTiempoReal = () => {
     const [personas, setPersonas] = useState<Persona[]>([]);
 
     useEffect(() => {
