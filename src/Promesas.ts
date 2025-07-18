@@ -4,23 +4,8 @@ import { Persona } from './interfaces/Persona';
 import { collection, getDocs, addDoc, doc, deleteDoc, updateDoc, onSnapshot } from 'firebase/firestore';
 
 const colleccion = collection(db, 'personas');
-export const usePersonasTiempoReal = () => {
-    const [personas, setPersonas] = useState<Persona[]>([]);
 
-    useEffect(() => {
-        const unsub = onSnapshot(collection(db, 'personas'), (snapshot) => {
-            const datos = snapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            })) as Persona[];
-            setPersonas(datos);
-        });
 
-        return () => unsub();
-    }, []);
-
-    return personas;
-}
 export const obtenerPersonas = async (): Promise<{ data: Persona[]; error: string | null}> =>{
     try {
         const snapshot = await getDocs(colleccion);
@@ -65,4 +50,22 @@ export const eliminarPersona = async (id: string): Promise<{ success: boolean; e
     } catch (error: any) {
         return { success: false, error: 'Error al eliminar la persona: ' + error.message };
     }
+};
+
+export const usePersonasTiempoReal = () => {
+    const [personas, setPersonas] = useState<Persona[]>([]);
+
+    useEffect(() => {
+        const unsub = onSnapshot(collection(db, 'personas'), (snapshot) => {
+            const datos = snapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            })) as Persona[];
+            setPersonas(datos);
+        });
+
+        return () => unsub();
+    }, []);
+
+    return personas;
 };

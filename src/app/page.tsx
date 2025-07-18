@@ -1,73 +1,38 @@
 'use client';
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import { Persona } from '../interfaces/Persona';
 import FormularioPersona from './componentes/FormularioPersona';
 import {usePersonasTiempoReal} from '../Promesas';
 
 export default function Page() {
   const [nombreActual, setNombreActual] = useState('');
-  const [personas, setPersonas] = useState<Persona[]>([]);
-  // const [personaSeleccionada, setPersonaSeleccionada] = useState<Persona | null>(null);
-  // const [indiceEditar, setIndiceEditar] = useState<number | null>(null);
-
-  useEffect(() => {
-    const datosGuardados = localStorage.getItem('personas');
-    if (datosGuardados) {
-      setPersonas(JSON.parse(datosGuardados));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('personas', JSON.stringify(personas));
-  }, [personas]);
+  const personas = usePersonasTiempoReal();
 
 
-  // CRUD DE LA EVALUACION ANTERIOR, QUE YA NO ES NECESARIO, YA QUE SE USARÁ FIREBASE
-  // const agregarPersona = (persona: Persona) => {
-  //   setPersonas([...personas, persona]);
-  // };
-
-  // const eliminarPersona = (indice: number) => {
-  //   if (window.confirm('¿Estás seguro de eliminar esta persona?')) {
-  //     const nuevasPersonas = personas.filter((_, i) => i !== indice);
-  //     setPersonas(nuevasPersonas);
-  //   }
-  // };
-
-  // const editarPersona = (indice: number) => {
-  //   setPersonaSeleccionada(personas[indice]);
-  //   setIndiceEditar(indice);
-  //   window.scrollTo({ top: 0, behavior: 'smooth' });
-  // };
-
-  // const actualizarPersona = (personaActualizada: Persona) => {
-  //   if (indiceEditar !== null) {
-  //     const nuevasPersonas = [...personas];
-  //     nuevasPersonas[indiceEditar] = personaActualizada;
-  //     setPersonas(nuevasPersonas);
-  //     setPersonaSeleccionada(null);
-  //     setIndiceEditar(null);
-  //   }
-  // };
-
-  const personasTiempoReal= usePersonasTiempoReal();
   return (
     <div className="App">
       <h1>Gestión de Personas y Tareas</h1>
       <h2>Bienvenido {nombreActual}</h2>
-      
 
+      <FormularioPersona actualizarNombreActual={setNombreActual} />
+      
+      
       <h3>Lista de personas registradas</h3>
-     
-        
-          {personas.map((p) => (
+      
+      {personas.length === 0 ? (
+        <p>No hay personas registradas.</p>
+      ) : (
+          personas.map((p) => (
             <div key={p.id}>
-              <strong>{p.nombre}</strong> ({p.edad}) <br/>
-              {p.cargo} - {p.tarea} <br/>
-              {p.fechaIngreso} <br/>
-              {p.descripcion} <br/>
+              <p>Nombre: </p><strong>{p.nombre}</strong> 
+              <p>Edad: </p>({p.edad}) <br/>
+              <p>Cargo: </p>{p.cargo} <br/>
+              <p> Tarea:</p>{p.tarea} <br/>
+              <p> Fecha de ingreso: </p>{p.fechaIngreso} <br/>
+              <p> Descripcion: </p>{p.descripcion} <br/>
             </div>
-          ))}
-          </div>
+          ))
+      )}
+    </div>
   );
 }
