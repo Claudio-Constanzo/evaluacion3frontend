@@ -22,16 +22,33 @@ export default function Page() {
       {personas.length === 0 ? (
         <p>No hay personas registradas.</p>
       ) : (
-          personas.map((p) => (
-            <div key={p.id}>
-              <p>Nombre: </p><strong>{p.nombre}</strong> 
-              <p>Edad: </p>({p.edad}) <br/>
-              <p>Cargo: </p>{p.cargo} <br/>
-              <p> Tarea:</p>{p.tarea} <br/>
-              <p> Fecha de ingreso: </p>{p.fechaIngreso} <br/>
-              <p> Descripcion: </p>{p.descripcion} <br/>
-            </div>
-          ))
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Edad</th>
+              <th>Cargo</th>
+              <th>Tarea</th>
+              <th>Fecha de ingreso</th>
+              <th>Descripción</th>
+            </tr>
+          </thead>
+          <tbody>
+            {personas
+              .slice()
+              .sort((a, b) => a.nombre.localeCompare(b.nombre))
+              .map((p) => (
+                <tr key={p.id}>
+                  <td>{p.nombre}</td>
+                  <td>{p.edad}</td>
+                  <td>{p.cargo}</td>
+                  <td>{p.tarea}</td>
+                  <td>{p.fechaIngreso}</td>
+                  <td>{p.descripcion}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
       )}
     </div>
   );
