@@ -1,11 +1,13 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Persona } from '../../interfaces/Persona';
 import { agregarPersona } from '../../Promesas';
 
 interface Props {
   actualizarNombreActual(nombre: string): void;
-}
+  guardarCambios(persona: Persona): void;
+  personaSeleccionada: Persona | null;
+  }
 
 interface Errores {
   nombre?: string;
@@ -16,12 +18,20 @@ interface Errores {
   fechaIngreso?: string;
 }
 
-const FormularioPersona = ({ actualizarNombreActual }: Props) => {
+
+const FormularioPersona = ({ actualizarNombreActual, guardarCambios, personaSeleccionada }: Props) => {
   const [persona, setPersona] = useState<Persona>({
     nombre: '', edad: 0, cargo: '', descripcion: '', tarea: '', fechaIngreso: ''
   });
   const [errores, setErrores] = useState<Errores>({});
-
+  useEffect(() => {
+    if (personaSeleccionada) {
+      setPersona(personaSeleccionada);
+      actualizarNombreActual(personaSeleccionada.nombre);
+      guardarCambios(personaSeleccionada);
+      personaSeleccionada.nombre && setPersona({ ...personaSeleccionada });
+    }
+  }, [personaSeleccionada, actualizarNombreActual]);
   const validarFormulario = () => {
     const nuevosErrores: Errores = {};
     
@@ -72,7 +82,12 @@ const FormularioPersona = ({ actualizarNombreActual }: Props) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validarFormulario()) return;
-    await agregarPersona(persona);
+    if (personaSeleccionada){
+      guardarCambios(persona);
+    } else {
+      agregarPersona(persona);
+      
+    }
     setPersona({ nombre: '', edad: 0, cargo: '', descripcion: '', tarea: '', fechaIngreso: '' });
     setErrores({});
     actualizarNombreActual('');
@@ -80,7 +95,7 @@ const FormularioPersona = ({ actualizarNombreActual }: Props) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Agregar Persona</h2>
+      
       <input name="nombre" placeholder="Nombre" value={persona.nombre} onChange={handleChange} /><br />
       {errores.nombre && <p style={{ color: 'red' }}>{errores.nombre}</p>}
 

@@ -68,3 +68,26 @@ footer {
     margin-top: 40px;
     border-top: 1px solid #e0e0e0;
 }
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 24px;
+}
+
+th, td {
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+th {
+    background: #e3f0fd;
+    color: #1a73e8;
+    font-weight: 600;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}

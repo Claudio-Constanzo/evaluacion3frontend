@@ -43,11 +43,27 @@ export const actualizarPersona = async (persona: Persona): Promise <{ success: b
     }
 };
 
-export const eliminarPersona = async (id: string): Promise<{ success: boolean; error?: string }> => {
+export const editarPersona = async (id: string, datos: Partial<Persona>): Promise<{ success: boolean; error?: string }> => {
+    if (!id) return {success: false, error: 'Falta id de la persona'};
     try {
-        await deleteDoc(doc(db, 'personas', id));
+        const ref = doc(db, 'personas', id);
+        await updateDoc(ref, datos);
         return { success: true };
     } catch (error: any) {
+        return { success: false, error: 'Error al editar la persona: ' + error.message };
+    }
+};
+
+export const eliminarPersona = async (id: string): Promise<{ success: boolean; error?: string }> => {
+    if (!window.confirm('¿Está seguro que desea eliminar esta persona?')) {
+        return { success: false, error: 'Eliminación cancelada por el usuario.' };
+    }
+    try {
+        await deleteDoc(doc(db, 'personas', id));
+        window.alert('Persona eliminada correctamente.');
+        return { success: true };
+    } catch (error: any) {
+        window.alert('Error al eliminar la persona: ' + error.message);
         return { success: false, error: 'Error al eliminar la persona: ' + error.message };
     }
 };
