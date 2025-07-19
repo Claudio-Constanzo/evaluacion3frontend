@@ -1,41 +1,46 @@
 'use client';
-import {  useState } from 'react';
-import FormularioPersona from './componentes/FormularioPersona';
-import {usePersonasTiempoReal,agregarPersona, actualizarPersona, eliminarPersona} from '../Promesas';
+import { useState } from 'react';
 import { Persona } from '../interfaces/Persona';
+import FormularioPersona from './componentes/FormularioPersona';
+import { usePersonasTiempoReal, eliminarPersona as eliminarPersonaApi } from '../Promesas';
 
 export default function Page() {
   const [nombreActual, setNombreActual] = useState('');
-  const personas = usePersonasTiempoReal();
   const [personaSeleccionada, setPersonaSeleccionada] = useState<Persona | null>(null);
-  const seleccionarPersonaParaEditar = (persona: Persona) => {
+  const personas = usePersonasTiempoReal();
+
+  const seleccionarPersona = (persona: Persona) => {
     setPersonaSeleccionada(persona);
     setNombreActual(persona.nombre);
   };
-  const guardarCambios = async (personaActualizada: Persona) => {
-    const resultado = await actualizarPersona(personaActualizada);
-    if (resultado.success) {
-      setNombreActual(personaActualizada.nombre);
-      setPersonaSeleccionada(null);
-      window.alert('Persona actualizada correctamente.');
+
+  const limpiarSeleccion = () => {
+    setPersonaSeleccionada(null);
+  };
+
+  const eliminarPersona = async (id: string) => {
+    const respuesta = await eliminarPersonaApi(id);
+    if (respuesta && respuesta.success) {
+      alert('Persona eliminada correctamente');
+      limpiarSeleccion();
     } else {
-      window.alert('Error al actualizar la persona: ' + resultado.error);
+      alert((respuesta && respuesta.error) || 'Error al eliminar la persona');
     }
   };
+  
+
   return (
     <div className="App">
       <h1>Gestión de Personas y Tareas</h1>
-      <h2>{personaSeleccionada ? 'Editar Persona' : 'Agregar Persona'}</h2>
+      <h2>Bienvenido {nombreActual}</h2>
 
-      <FormularioPersona 
-      actualizarNombreActual={setNombreActual} 
-      guardarCambios={guardarCambios}
-      personaSeleccionada={personaSeleccionada}
+      <FormularioPersona
+        personaSeleccionada={personaSeleccionada}
+        actualizarNombreActual={setNombreActual}
+        guardarCambiosLocal={limpiarSeleccion}
       />
-      
-      
+
       <h3>Lista de personas registradas</h3>
-      
       {personas.length === 0 ? (
         <p>No hay personas registradas.</p>
       ) : (
@@ -64,8 +69,8 @@ export default function Page() {
                   <td>{p.fechaIngreso}</td>
                   <td>{p.descripcion}</td>
                   <td>
-                    <button type= "submit" onClick={() => {personaSeleccionada ? 'Actualizar' : 'Agregar'}}>Editar</button>
-                    <button onClick={() => p.id && eliminarPersona(p.id)}>Eliminar</button>
+                    <button type="button" onClick={() => seleccionarPersona(p)}>Editar</button>
+                    <button type="button" onClick={() => p.id && eliminarPersona(p.id)}>Eliminar</button>
                   </td>
                 </tr>
               ))}
